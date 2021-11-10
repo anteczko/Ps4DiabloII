@@ -1,0 +1,35 @@
+DiabloControls - program that will allow to play diablo II using DualShock4 controller on linux
+
+Controls ideas:
+-walking with right/left analog stick
+-mouse buttons binded to L/R 1/2 buttons for convinence
+-swap weapons with similar buttons
+
+
+Program loop:
+-wait x miliseconds
+-scan log file using grep or awk what buttons were pressed
+-execute buttons
+-clear log file
+
+TODO:
+-think about some sensible controls for potions etc.
+ -arrows?
+ -combo or button and arrow?
+
+Different modes:
+-default (playing game)
+ -left stick-walking
+ -right stick-LMB mashing
+  -R1-changes to RMB clicking
+ -arrows-potions
+ -triangle-changes weapon layouts
+ -square/cricle+arrows-rebinds skills
+ -cross-pick ups items?
+ -cross+arrows-moves map
+-inventory
+ -for start, touchpad should be enough
+-trading
+-storage
+-skilltree
+-questlog

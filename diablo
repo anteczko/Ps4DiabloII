@@ -1,0 +1,62 @@
+#!/bin/bash
+
+move () {
+	x=`printf %d | grep -ao 'left_analog_x: .*' ./logs | sort | uniq | cut -c 16- | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print int(total/count)}'`
+	y=`printf %d | grep -ao 'left_analog_y: .*' ./logs | sort | uniq | cut -c 16- | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print int(total/count)}'`
+
+	y=$((y-20))
+
+	x=$((x-128))
+	y=$((y-128))
+
+	x=$((x*1))
+	y=$((y*1))
+
+	x=$((x+400))
+	y=$((y+300))
+
+	if [[ $x -lt 120 || $x -gt 140 ]]; then
+		echo analogs x:$x
+	fi
+	if [[ $y -lt 120 || $y -gt 140 ]]; then
+		echo analogs y:$y
+	fi
+	if grep -ao 'button_l2: True' ./logs; then
+		xdotool mousemove $x $y
+		echo moving mouse to $x $y
+	fi
+}
+
+lmb () {
+	if grep -ao 'button_l1: True' ./logs; then
+		echo "button clicked!!!"
+		xdotool click 1
+	fi
+	if grep -ao 'button_r1: True' ./logs; then
+		echo "button clicked!!!"
+		xdotool click 3
+	fi
+}
+
+echo launching program!\n
+#echo "" > logs
+#out=`ds4drv --dump-reports > ./logs &`
+#ds4drv --dump-reports > ./logs &
+
+
+while [ -z "$test" ] || [ "$test" != "q" ]
+do
+	echo looping through!!!
+	echo $out
+	echo "" > ./logs
+	sleep 0.03
+	#grep -ao 'right_analog_x: .*' ./logs | sort | uniq | cut -c 17- | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print total/count}'
+	#grep -ao '\w*: True' ./logs | sort | uniq
+	move
+	lmb
+	read -n 1 -t 0.001 test
+
+done
+
+pkill ds4drv
+
